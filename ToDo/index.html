@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODot</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+          
+        }
+        .container{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 660px;
+            background-color: rgb(0, 0, 0);
+            height: 80px;
+            position: fixed;
+            bottom: 0;
+
+            }
+        #task{
+            border:3px solid;
+            border-color: aqua;
+            height: 30px;
+        }
+        .btn{
+            background-color: rgb(255, 255, 0);
+            height: 35px;
+            
+        }
+        .selects{
+            height: 35px;
+            border-radius: 0px;
+          
+            font-size: 15px;
+        }
+        #displayContainers {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid;
+    margin-top: 10px;
+    margin-left:10px;
+}
+.btn2 {
+    background-color: rgb(211, 190, 31);
+    height: 35px;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.h2tag {
+    margin-left: auto;
+    margin-right: 10px;
+}
+    </style>
+</head>
+<body>
+   <center> <h1>Welcome TO DO List</h1></center>
+   <div id="displayContainer">
+   
+   </div>
+    <div class="container">
+    <input type="text" id="task" />
+    <select id="priority" class="selects">
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+        </select>
+    <button onclick="addTask()" class="btn">Add Task</button>
+</div>
+
+
+
+
+    <script>
+        let task=[];
+        
+        function addTask(){
+            let taskElement =document.getElementById('task');
+            let priorityElement=document.getElementById('priority');
+           const tasks={
+               task:taskElement.value,
+               priority:priorityElement.value,
+           };
+             task.push(tasks);
+             
+              localStorage.setItem('Tasks',JSON.stringify(task)); 
+              displayTask(task);
+              
+        }
+        const savedTask= localStorage.getItem("Tasks");
+        if (savedTask) {
+    task = JSON.parse(savedTask);
+    displayTask(task); }
+
+       
+        function displayTask(Display){
+            let display =document.getElementById('displayContainer');
+            display.innerHTML="";
+            for(let i=0;i<Display.length ;i++){
+                   let taskobj =Display[i];
+                  display.innerHTML +=`<div id="displayContainers">
+                    <h1 class="h1tag">${Display[i].task}</h1>
+                    <h2 class="h2tag">${Display[i].priority}</h2>
+                    <button class="btn2" onclick="deletes(this)">Delete</button>
+                    </div>`;    
+            }
+          
+            
+        }
+
+        function deletes(button) {
+    let taskElement = button.parentElement; 
+    let taskText = taskElement.querySelector(".h1tag").innerText; 
+    let index = task.findIndex(t => t.task === taskText); 
+    if (index !== -1) {
+        task.splice(index, 1);
+        localStorage.setItem('Tasks', JSON.stringify(task));
+        displayTask(task); 
+    }
+}
+
+     
+         
+       
+    </script>
+</body>
+</html>
